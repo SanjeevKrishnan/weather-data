@@ -1,25 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import axios from "axios";
+import React from "react";
+import GetWeather from "./getWeather";
 
-function App() {
+const baseURL = "https://countriesnow.space/api/v0.1/countries";
+
+export default function App() {
+  const [post, setPost] = React.useState(null);
+  const [country, setCountry] = React.useState(null);
+  const [openWeather, setOpenWeather] = React.useState(false);
+
+  React.useEffect(() => {
+    axios.get(baseURL).then((response) => {
+      setPost(response.data.data);
+    });
+  }, []);
+
+  if (!post) return null;
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Weather-APP</h1>
+      {post.map(one_post => {
+        return(
+          <div>
+            <div key={one_post.id} onClick={() => {
+                setOpenWeather(true)
+                setCountry(one_post.country);
+              }}>
+              {one_post.country}
+            </div>
+          </div>
+        );
+      })}
+      {openWeather ? <GetWeather country = {country}/> : null}
     </div>
   );
 }
-
-export default App;
