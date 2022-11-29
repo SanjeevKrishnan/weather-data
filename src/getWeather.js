@@ -1,5 +1,6 @@
 import axios from "axios";
 import React from "react";
+import "./App.css"
 
 const GetWeather = (props) => {
     console.log("inside", props.country)
@@ -12,6 +13,7 @@ const GetWeather = (props) => {
           try {
             const res = await axios.get(weatherAPI);
             const data = res.data
+            console.log(data)
             setWeather({
                 "temp": {
                   "min": data.main.temp_min,
@@ -34,9 +36,27 @@ const GetWeather = (props) => {
       console.log(weather);
 
     return(
-        <div>
-            <h2>Hello from {props.country}</h2>
-            <h1>{weather && weather.temp.min}</h1>
+        <div style={{marginTop: "128px"}}>
+            <h2>Latest weather details for {props.country}!</h2>
+            <div className="weather-wrapper">
+                <div className="weather-box">
+                    <p className="weather-type">Temperature</p>
+                    <p>Min Temperature: {weather && weather.temp.min} K</p>
+                    <p>Max Temperature: {weather && weather.temp.max} K</p>
+                    <p>Avg Temperature: {weather && weather.temp.avg} K</p>
+                </div>
+                <div className="weather-box">
+                    <p className="weather-type">Humididty</p>
+                    <p>{weather && weather.humidity} %</p>
+                </div>
+                <div className="weather-box">
+                    <p className="weather-type">Wind</p>
+                    <p>Degree: {weather && weather.wind.deg}°</p>
+                    <p>Gust: {weather && weather.wind.gust} m/s</p>
+                    <p>Speed: {weather && weather.wind.speed} m/s</p>
+                </div>
+            </div>
+            
         </div>
     )
   }

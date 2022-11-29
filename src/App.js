@@ -13,21 +13,23 @@ export default function App() {
   const [country, setCountry] = React.useState(null);
   const [openWeather, setOpenWeather] = React.useState(false);
   const baseURL = "https://countriesnow.space/api/v0.1/countries";
-
-  const options = [
-    'one', 'two', 'three'
-  ];
-  const defaultOption = options[0];
   
 
   React.useEffect(() => {
     axios.get(baseURL).then((response) => {
-      setPost(response.data.data);
+      const data = response.data.data
+      let countries = []
+      for(let i = 0; i< data.length; i++)
+      {
+        countries.push(data[i].country)
+      }
+      setPost(countries)
     });
   }, []);
-  const onClickofCountry = () => {
+  const onClickofCountry = (event) => {
     setOpenWeather(true);
-    setCountry(one_post.country);
+    setCountry(event.value);
+    console.log(event)
   } 
 
   if (!post) return null;
@@ -35,12 +37,15 @@ export default function App() {
   return (
     <div>
       <h1 className="heading">Weather-APP</h1>
+      <div className="dropdown-div">
       <Dropdown 
               options={post} 
-              onChange={onClickofCountry}
-              value={post[0]} 
-              placeholder="Select an option" />
+              onChange={e => onClickofCountry(e)}
+              placeholder="Select country" />
+      </div>
+      <div className="weather-div">
       {openWeather ? <GetWeather country = {country}/> : null}
+      </div>
     </div>
   );
 }
